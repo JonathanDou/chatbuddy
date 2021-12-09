@@ -104,11 +104,16 @@ class Multi_Headed(tf.keras.layers.Layer):
         # TODO:
         # Initialize heads
         
-        self.size = int(emb_sz/3)
+        self.size = int(emb_sz/6)
         
         self.head1 = Atten_Head(self.size,self.size,use_mask)
         self.head2 = Atten_Head(self.size,self.size,use_mask)
         self.head3 = Atten_Head(self.size,self.size,use_mask)
+        self.head4 = Atten_Head(self.size,self.size,use_mask)
+        self.head5 = Atten_Head(self.size,self.size,use_mask)
+        self.head6 = Atten_Head(self.size,self.size,use_mask)
+        #self.head7 = Atten_Head(self.size,self.size,use_mask)
+        #self.head8 = Atten_Head(self.size,self.size,use_mask)
         
         self.d1 = tf.keras.layers.Dense(emb_sz)
 
@@ -134,11 +139,24 @@ class Multi_Headed(tf.keras.layers.Layer):
         
         output1 = self.head1(inputs_for_keys[:,:,:self.size], inputs_for_values[:,:,:self.size], inputs_for_queries[:,:,:self.size])
         output2 = self.head2(inputs_for_keys[:,:,self.size:2*self.size], inputs_for_values[:,:,self.size:2*self.size], inputs_for_queries[:,:,self.size:2*self.size])
+        output3 = self.head3(inputs_for_keys[:,:,2*self.size:3*self.size], inputs_for_values[:,:,2*self.size:3*self.size], inputs_for_queries[:,:,2*self.size:3*self.size])
+        output4 = self.head4(inputs_for_keys[:,:,3*self.size:4*self.size], inputs_for_values[:,:,3*self.size:4*self.size], inputs_for_queries[:,:,3*self.size:4*self.size])
+        output5 = self.head5(inputs_for_keys[:,:,4*self.size:5*self.size], inputs_for_values[:,:,4*self.size:5*self.size], inputs_for_queries[:,:,4*self.size:5*self.size])
+        output6 = self.head6(inputs_for_keys[:,:,5*self.size:6*self.size], inputs_for_values[:,:,5*self.size:6*self.size], inputs_for_queries[:,:,5*self.size:6*self.size])
+        #output7 = self.head7(inputs_for_keys[:,:,6*self.size:7*self.size], inputs_for_values[:,:,6*self.size:7*self.size], inputs_for_queries[:,:,6*self.size:7*self.size])
+        #output8 = self.head8(inputs_for_keys[:,:,7*self.size:], inputs_for_values[:,:,7*self.size:], inputs_for_queries[:,:,7*self.size:])
+        
+        
+        output = tf.concat([output1, output2, output3, output4, output5, output6], -1)
+        output = self.d1(output)     
+        
+        '''output1 = self.head1(inputs_for_keys[:,:,:self.size], inputs_for_values[:,:,:self.size], inputs_for_queries[:,:,:self.size])
+        output2 = self.head2(inputs_for_keys[:,:,self.size:2*self.size], inputs_for_values[:,:,self.size:2*self.size], inputs_for_queries[:,:,self.size:2*self.size])
         output3 = self.head3(inputs_for_keys[:,:,self.size*2:], inputs_for_values[:,:,self.size*2:], inputs_for_queries[:,:,self.size*2:])
         
         
         output = tf.concat([output1,output2,output3], -1)
-        output = self.d1(output)
+        output = self.d1(output)'''
         
         return output
 

@@ -4,7 +4,6 @@ import tensorflow as tf
 import numpy as np
 from preprocess import *
 from transformer_model import Transformer_Seq2Seq
-from rnn_model import RNN_Seq2Seq
 
 import random
 
@@ -130,13 +129,15 @@ def main():
     # TODO:
     # Train and Test Model for 1 epoch.
     
+    #model.load_weights('savedmodel')
+    #print("LOADED")
+    
     epochs = 1
     
     for i in range(epochs):
-        #train(model, train_in, train_english, eng_padding_index, i)
-        continue
+        train(model, train_in, train_english, eng_padding_index, i)
+        #continue
         
-    
     #perplexity, accuracy = test(model, test_french, test_english, eng_padding_index)
     
     #print("Final Accuarcy: " + str(accuracy))
@@ -146,12 +147,12 @@ def main():
     # Only takes effect if you enabled visualizations above
     #av.show_atten_heatmap()
     
-    #model.save_weights('savedmodel')
+    model.save_weights('savedmodel')
 
-    #print("SAVED")
+    print("SAVED")
     
-    model.load_weights('savedmodel')
-    print("LOADED")
+    #model.load_weights('savedmodel')
+    #print("LOADED")
 
     english_vocab2 = {v: k for k, v in english_vocab.items()}
     

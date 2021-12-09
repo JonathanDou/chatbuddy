@@ -46,6 +46,22 @@ class Transformer_Seq2Seq(tf.keras.Model):
         self.encoder2 = transformer.Transformer_Block(self.embedding_size, False, True)
         
         self.decoder2 = transformer.Transformer_Block(self.embedding_size, True, True)
+        
+        self.encoder3 = transformer.Transformer_Block(self.embedding_size, False, True)
+        
+        self.decoder3 = transformer.Transformer_Block(self.embedding_size, True, True)
+        
+        self.encoder4 = transformer.Transformer_Block(self.embedding_size, False, True)
+        
+        self.decoder4 = transformer.Transformer_Block(self.embedding_size, True, True)
+        
+        self.encoder5 = transformer.Transformer_Block(self.embedding_size, False, True)
+        
+        self.decoder5 = transformer.Transformer_Block(self.embedding_size, True, True)
+        
+        self.encoder6 = transformer.Transformer_Block(self.embedding_size, False, True)
+        
+        self.decoder6 = transformer.Transformer_Block(self.embedding_size, True, True)
     
         # Define dense layer(s)
         
@@ -72,6 +88,13 @@ class Transformer_Seq2Seq(tf.keras.Model):
         encoded = self.encoder(embedding1)
         encoded = self.encoder2(encoded)
         
+        encoded = self.encoder3(encoded)
+        encoded = self.encoder4(encoded)
+        
+        encoded = self.encoder5(encoded)
+        encoded = self.encoder6(encoded)
+        
+        
         #3) Add positional embeddings to the english sentence embeddings
         
         embedding2 = self.PE(embedding2)
@@ -80,14 +103,16 @@ class Transformer_Seq2Seq(tf.keras.Model):
         
         decoded = self.decoder(embedding2, encoded)
         decoded = self.decoder2(decoded, encoded)
+        decoded = self.decoder3(decoded, encoded)
+        decoded = self.decoder4(decoded, encoded)
+        decoded = self.decoder5(decoded, encoded)
+        decoded = self.decoder6(decoded, encoded)
         
         #5) Apply dense layer(s) to the decoder out to generate probabilities
         
         logits = self.D1(decoded)
         
         probs = tf.nn.softmax(logits)
-        
-        embedding1 = tf.reshape(embedding1, [len(embedding1), -1])
     
         return probs
 
